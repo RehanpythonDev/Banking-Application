@@ -1,0 +1,8 @@
+# requirements.txt
+# No external dependencies required as we're using only standard libraries
+# Standard libraries used:
+# - json: For data storage
+# - datetime: For transaction timestamps
+# - hashlib: For password hashing
+# - os: For system operations like clearing screen
+# - sys: For exiting the program

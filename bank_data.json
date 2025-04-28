@@ -1,0 +1,32 @@
+{
+    "Rehan": {
+        "username": "Rehan",
+        "password_hash": "vhKd+eQ2aN8sId/qSvDz0OuDxl/93nnhMUT/XVqAOGwexevMv51Gp5XQhdAVaLxm",
+        "balance": 10000.0,
+        "created_at": "2025-04-28 14:13:31",
+        "transactions": [
+            {
+                "type": "deposit",
+                "amount": 10000.0,
+                "description": "Initial deposit for account creation",
+                "timestamp": "2025-04-28 14:13:31",
+                "balance": 10000.0
+            }
+        ]
+    },
+    "hassan": {
+        "username": "hassan",
+        "password_hash": "a8tK319aOawFLBKV5JxkSaI0pJBEe1D3fxnC83ajk/HSA44K8vStNgfSb8SRQaIe",
+        "balance": 10000.0,
+        "created_at": "2025-04-28 14:14:02",
+        "transactions": [
+            {
+                "type": "deposit",
+                "amount": 10000.0,
+                "description": "Initial deposit for account creation",
+                "timestamp": "2025-04-28 14:14:02",
+                "balance": 10000.0
+            }
+        ]
+    }
+}

@@ -1,0 +1,161 @@
+sequenceDiagram
+    participant User
+    participant UI as UIService
+    participant BS as BankingApp
+    participant US as UserService
+    participant AS as AccountService
+    participant TS as TransactionService
+    participant SS as StorageService
+    participant SEC as SecurityService
+    
+    %% Application Initialization
+    User->>BS: Start application
+    BS->>SS: initialize()
+    SS->>SS: mount_drive()
+    SS-->>BS: drive mounted
+    BS->>US: initialize(storage_service, security_service)
+    BS->>AS: initialize(storage_service, transaction_service)
+    BS->>TS: initialize(storage_service)
+    BS->>UI: initialize(user_service, account_service, transaction_service)
+    BS->>UI: display_menu()
+    UI-->>User: Show main menu
+    
+    %% User Registration Flow
+    User->>UI: Select "Create New User"
+    UI->>UI: collect_user_info()
+    UI->>US: create_user(first_name, last_name, email, password, phone, address)
+    US->>SEC: validate_email(email)
+    SEC-->>US: email valid
+    US->>SEC: validate_password_strength(password)
+    SEC-->>US: password valid
+    US->>SEC: hash_password(password)
+    SEC-->>US: password_hash
+    US->>SEC: generate_id()
+    SEC-->>US: user_id
+    US->>User: new User(user_id, first_name, last_name, email, password_hash, phone, address)
+    US->>SS: save_users(users)
+    SS-->>US: save successful
+    US-->>UI: user created
+    UI-->>User: Confirm user creation
+    
+    %% User Authentication
+    User->>UI: Select "Login"
+    UI->>UI: login_menu()
+    UI->>US: authenticate_user(email, password)
+    US->>SS: load_users()
+    SS-->>US: users data
+    US->>US: find user by email
+    US->>SEC: verify_password(password, user.password_hash)
+    SEC-->>US: password verified
+    US-->>UI: authenticated user
+    UI->>UI: user_menu()
+    UI-->>User: Show user menu
+    
+    %% Account Creation Flow
+    User->>UI: Select "Open New Account"
+    UI->>UI: account_menu()
+    UI->>AS: create_account(user_id, account_type, initial_balance)
+    AS->>SEC: generate_id()
+    SEC-->>AS: account_number
+    AS->>Account: new Account(account_number, user_id, account_type, initial_balance)
+    AS->>TS: create_transaction(account_number, "Deposit", initial_balance)
+    TS->>SEC: generate_id()
+    SEC-->>TS: transaction_id
+    TS->>Transaction: new Transaction(transaction_id, account_number, "Deposit", initial_balance, timestamp)
+    TS->>SS: save_transactions(transactions)
+    TS-->>AS: transaction created
+    AS->>SS: save_accounts(accounts)
+    SS-->>AS: save successful
+    AS-->>UI: account created
+    UI-->>User: Confirm account creation
+    
+    %% Deposit Flow
+    User->>UI: Select "Deposit"
+    UI->>UI: transaction_menu()
+    UI->>AS: get_user_accounts(user_id)
+    AS->>SS: load_accounts()
+    SS-->>AS: accounts data
+    AS-->>UI: user accounts
+    UI-->>User: Select account and enter amount
+    User->>UI: account selection and amount
+    UI->>TS: create_transaction(account_number, "Deposit", amount)
+    TS->>SEC: generate_id()
+    SEC-->>TS: transaction_id
+    TS->>Transaction: new Transaction(transaction_id, account_number, "Deposit", amount, timestamp)
+    TS->>AS: update_balance(account_number, amount)
+    AS->>SS: load_accounts()
+    SS-->>AS: accounts data
+    AS->>AS: find account and update balance
+    AS->>SS: save_accounts(accounts)
+    SS-->>AS: save successful
+    AS-->>TS: balance updated
+    TS->>SS: save_transactions(transactions)
+    SS-->>TS: save successful
+    TS-->>UI: deposit completed
+    UI-->>User: Confirm deposit
+    
+    %% Withdrawal Flow
+    User->>UI: Select "Withdraw"
+    UI->>UI: transaction_menu()
+    UI->>AS: get_user_accounts(user_id)
+    AS->>SS: load_accounts()
+    SS-->>AS: accounts data
+    AS-->>UI: user accounts
+    UI-->>User: Select account and enter amount
+    User->>UI: account selection and amount
+    UI->>AS: get_account(account_number)
+    AS->>SS: load_accounts()
+    SS-->>AS: accounts data
+    AS-->>UI: account
+    UI->>UI: validate withdrawal amount
+    UI->>TS: create_transaction(account_number, "Withdrawal", -amount)
+    TS->>SEC: generate_id()
+    SEC-->>TS: transaction_id
+    TS->>Transaction: new Transaction(transaction_id, account_number, "Withdrawal", -amount, timestamp)
+    TS->>AS: update_balance(account_number, -amount)
+    AS->>SS: load_accounts()
+    SS-->>AS: accounts data
+    AS->>AS: find account and update balance
+    AS->>SS: save_accounts(accounts)
+    SS-->>AS: save successful
+    AS-->>TS: balance updated
+    TS->>SS: save_transactions(transactions)
+    SS-->>TS: save successful
+    TS-->>UI: withdrawal completed
+    UI-->>User: Confirm withdrawal
+    
+    %% Check Balance Flow
+    User->>UI: Select "Check Balance"
+    UI->>AS: get_user_accounts(user_id)
+    AS->>SS: load_accounts()
+    SS-->>AS: accounts data
+    AS-->>UI: user accounts
+    UI-->>User: Select account
+    User->>UI: account selection
+    UI->>AS: get_account(account_number)
+    AS->>SS: load_accounts()
+    SS-->>AS: accounts data
+    AS-->>UI: account with balance
+    UI->>TS: get_account_transactions(account_number)
+    TS->>SS: load_transactions()
+    SS-->>TS: transactions data
+    TS-->>UI: recent transactions
+    UI->>UI: visualize_balance_history(account_number)
+    UI-->>User: Display balance and transactions
+    
+    %% User Detail Modification Flow
+    User->>UI: Select "Update Profile"
+    UI->>US: get_user(user_id)
+    US->>SS: load_users()
+    SS-->>US: users data
+    US-->>UI: user details
+    UI-->>User: Display current info and fields to update
+    User->>UI: field selection and new value
+    UI->>US: update_user(user_id, fields)
+    US->>SS: load_users()
+    SS-->>US: users data
+    US->>US: update user fields
+    US->>SS: save_users(users)
+    SS-->>US: save successful
+    US-->>UI: update successful
+    UI-->>User: Confirm profile update

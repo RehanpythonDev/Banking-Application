@@ -1,0 +1,142 @@
+classDiagram
+    class User {
+        +str user_id
+        +str first_name
+        +str last_name
+        +str email
+        +str password_hash
+        +str phone
+        +str address
+        +list[str] accounts
+        +__init__(user_id, first_name, last_name, email, password_hash, phone, address)
+        +to_dict() dict
+        +from_dict(data) User
+    }
+    
+    class Account {
+        +str account_number
+        +str user_id
+        +str account_type
+        +float balance
+        +datetime creation_date
+        +list[Transaction] transaction_history
+        +__init__(account_number, user_id, account_type, balance)
+        +deposit(amount) bool
+        +withdraw(amount) bool
+        +get_balance() float
+        +to_dict() dict
+        +from_dict(data) Account
+    }
+    
+    class Transaction {
+        +str transaction_id
+        +str account_number
+        +str transaction_type
+        +float amount
+        +datetime timestamp
+        +__init__(transaction_id, account_number, transaction_type, amount, timestamp)
+        +to_dict() dict
+        +from_dict(data) Transaction
+    }
+    
+    class UserService {
+        -StorageService storage_service
+        -SecurityService security_service
+        +__init__(storage_service, security_service)
+        +create_user(first_name, last_name, email, password, phone, address) User
+        +get_user(user_id) User
+        +get_user_by_email(email) User
+        +update_user(user_id, fields) bool
+        +authenticate_user(email, password) User
+        +list_users() list[User]
+    }
+    
+    class AccountService {
+        -StorageService storage_service
+        -TransactionService transaction_service
+        +__init__(storage_service, transaction_service)
+        +create_account(user_id, account_type, initial_balance) Account
+        +get_account(account_number) Account
+        +get_user_accounts(user_id) list[Account]
+        +update_balance(account_number, amount) bool
+        +close_account(account_number) bool
+    }
+    
+    class TransactionService {
+        -StorageService storage_service
+        +__init__(storage_service)
+        +create_transaction(account_number, transaction_type, amount) Transaction
+        +get_account_transactions(account_number) list[Transaction]
+        +get_transaction(transaction_id) Transaction
+    }
+    
+    class StorageService {
+        -str users_file
+        -str accounts_file
+        -str transactions_file
+        -bool drive_mounted
+        +__init__()
+        +mount_drive() bool
+        +save_users(users) bool
+        +load_users() list[dict]
+        +save_accounts(accounts) bool
+        +load_accounts() list[dict]
+        +save_transactions(transactions) bool
+        +load_transactions() list[dict]
+        +backup_data() bool
+    }
+    
+    class SecurityService {
+        +hash_password(password) str
+        +verify_password(password, password_hash) bool
+        +generate_id() str
+        +validate_email(email) bool
+        +validate_password_strength(password) bool
+    }
+    
+    class UIService {
+        -UserService user_service
+        -AccountService account_service
+        -TransactionService transaction_service
+        -User current_user
+        +__init__(user_service, account_service, transaction_service)
+        +display_menu() None
+        +login_menu() None
+        +user_menu() None
+        +account_menu() None
+        +transaction_menu() None
+        +collect_user_info() dict
+        +display_accounts(user_id) None
+        +display_transactions(account_number) None
+        +display_balance(account_number) None
+        +visualize_balance_history(account_number) None
+    }
+    
+    class BankingApp {
+        -UserService user_service
+        -AccountService account_service
+        -TransactionService transaction_service
+        -StorageService storage_service
+        -SecurityService security_service
+        -UIService ui_service
+        +__init__()
+        +initialize() bool
+        +run() None
+    }
+    
+    User "1" -- "*" Account : has
+    Account "1" -- "*" Transaction : contains
+    BankingApp "1" -- "1" UserService : uses
+    BankingApp "1" -- "1" AccountService : uses
+    BankingApp "1" -- "1" TransactionService : uses
+    BankingApp "1" -- "1" StorageService : uses
+    BankingApp "1" -- "1" SecurityService : uses
+    BankingApp "1" -- "1" UIService : uses
+    UserService -- StorageService : uses
+    UserService -- SecurityService : uses
+    AccountService -- StorageService : uses
+    AccountService -- TransactionService : uses
+    TransactionService -- StorageService : uses
+    UIService -- UserService : uses
+    UIService -- AccountService : uses
+    UIService -- TransactionService : uses
