@@ -1,8 +1,9 @@
 {
     "Rehan": {
         "username": "Rehan",
-        "password_hash": "vhKd+eQ2aN8sId/qSvDz0OuDxl/93nnhMUT/XVqAOGwexevMv51Gp5XQhdAVaLxm",
-        "balance": 10000.0,
+        "password_hash": "qCef9CqcJZiQ8oVLos+1daMMB0pcmfOUhYksdIqv6dAxaJwBaJ9Jg1Sw/qJsuhYB",
+        "balance": 10800.0,
+        "pin": "9607",
         "created_at": "2025-04-28 14:13:31",
         "transactions": [
             {
@@ -11,13 +12,35 @@
                 "description": "Initial deposit for account creation",
                 "timestamp": "2025-04-28 14:13:31",
                 "balance": 10000.0
+            },
+            {
+                "type": "transfer_out",
+                "amount": 2000.0,
+                "description": "Sent to hassan: ",
+                "timestamp": "2025-04-30 14:20:17",
+                "balance": 8000.0
+            },
+            {
+                "type": "transfer_in",
+                "amount": 3000.0,
+                "description": "Received from hassan: ",
+                "timestamp": "2025-04-30 14:28:46",
+                "balance": 11000.0
+            },
+            {
+                "type": "transfer_out",
+                "amount": 200.0,
+                "description": "Sent to hassan: ",
+                "timestamp": "2025-04-30 14:52:16",
+                "balance": 10800.0
             }
         ]
     },
     "hassan": {
         "username": "hassan",
-        "password_hash": "a8tK319aOawFLBKV5JxkSaI0pJBEe1D3fxnC83ajk/HSA44K8vStNgfSb8SRQaIe",
-        "balance": 10000.0,
+        "password_hash": "8qoAHyUXNuY4u++TP5U59MYE1cl/Oy4E0SKdjSt+Iaw2xnivqQDHnsbYPO7TPvYa",
+        "balance": 9200.0,
+        "pin": null,
         "created_at": "2025-04-28 14:14:02",
         "transactions": [
             {
@@ -26,6 +49,42 @@
                 "description": "Initial deposit for account creation",
                 "timestamp": "2025-04-28 14:14:02",
                 "balance": 10000.0
+            },
+            {
+                "type": "transfer_in",
+                "amount": 2000.0,
+                "description": "Received from Rehan: ",
+                "timestamp": "2025-04-30 14:20:17",
+                "balance": 12000.0
+            },
+            {
+                "type": "transfer_out",
+                "amount": 3000.0,
+                "description": "Sent to Rehan: ",
+                "timestamp": "2025-04-30 14:28:46",
+                "balance": 9000.0
+            },
+            {
+                "type": "transfer_in",
+                "amount": 200.0,
+                "description": "Received from Rehan: ",
+                "timestamp": "2025-04-30 14:52:16",
+                "balance": 9200.0
+            }
+        ]
+    },
+    "Hassan": {
+        "username": "Hassan",
+        "password_hash": "eaOiirffZ+tXgcoSQCZ/cSC2oLhFWiRSGGh6+mf5AN5j3lNQH2M/0BN6Bqy6U+nu",
+        "balance": 100000.0,
+        "created_at": "2025-04-30 13:00:30",
+        "transactions": [
+            {
+                "type": "deposit",
+                "amount": 100000.0,
+                "description": "Initial deposit for account creation",
+                "timestamp": "2025-04-30 13:00:30",
+                "balance": 100000.0
             }
         ]
     }
